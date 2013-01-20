@@ -159,16 +159,15 @@ public class Client {
 		if(this.world.get(this.level)==null){
 			throw new NullPointerException("world has no level by the name: "+this.level);
 		}
-		Iterator<Entry<String, Node>> nit = this.world.get(this.level).entrySet().iterator();
+		Iterator<Node> nit = this.world.get(this.level).values().iterator();
 		while(nit.hasNext()){
-			Entry<String, Node> n = nit.next();
-			n.getValue().draw(batch);
+			Node n = nit.next();
+			n.draw(batch);
 		}
 		
-		Iterator<String> pit = this.players.keySet().iterator();
+		Iterator<Player> pit = this.players.values().iterator();
 		while(pit.hasNext()){
-			String id = pit.next();
-			Player p = this.players.get(id);
+			Player p = pit.next();
 			if(p.levelName.equals(this.level)){
 				p.draw(batch);
 			}

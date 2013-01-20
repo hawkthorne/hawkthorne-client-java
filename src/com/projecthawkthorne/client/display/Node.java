@@ -8,11 +8,9 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.projecthawkthorne.client.Direction;
@@ -32,8 +30,8 @@ public class Node {
 	public float width;
 	public float height;
 	protected String state = "default";
-	public String type;
-	public String name;
+	protected String type;
+	protected String name;
 	//!!!!!Warning if you change level from type Level to type String
 	// this will be structurally different from the back end Node
 	public String levelName;
@@ -64,19 +62,18 @@ public class Node {
 
 	
 	public void draw(SpriteBatch batch) {
-		if(objectTexture==null){
-			String folderName;
-			if(this.type.equals("enemy")){
-				folderName = "enemies";
-			}else{
-				folderName = this.type+"s";
-			}
-			//FileHandle otFile = Gdx.files.internal(IMAGES_FOLDER + folderName +"/"+this.name+".png");
-			FileHandle otFile = Gdx.files.internal(IMAGES_FOLDER + "defaultObject.png");
-			this.objectTexture = new Texture(otFile);
+		Animation anim;
+		try{
+		anim = Assets.nodes.get(this.type).
+				get(this.name).
+				get(this.state);
+         		batch.draw(anim.getKeyFrame(1.0f), this.x, this.y);
+		}catch(NullPointerException e){
+			System.err.println(this.type);
+			System.err.println(this.name);
+			System.err.println(this.state);
+			System.err.println();
 		}
-
-		batch.draw(objectTexture, this.x, this.y, this.width, this.height, this.srcY, this.srcY, this.srcWidth, this.srcHeight, false, false);
 		//TODO:instantiate the font once
 		BitmapFont font = new BitmapFont(true);
 

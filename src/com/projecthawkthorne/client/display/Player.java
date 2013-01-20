@@ -1,14 +1,14 @@
 package com.projecthawkthorne.client.display;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.projecthawkthorne.client.Direction;
 
 
 public class Player extends Node{
 	Character character;
+	protected String type = "player";
 	public Player(String type, String name) {
-		super("abed", "base");
-		character = new Character("abed","base");
+		super("player", "abed");
+		character = new Character(type,name);
 		// TODO Auto-generated constructor stub
 	}
 	public static Player unpack(String params){

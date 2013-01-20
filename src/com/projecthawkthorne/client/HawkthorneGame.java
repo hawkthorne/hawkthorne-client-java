@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.tests.utils.OrthoCamController;
 import com.projecthawkthorne.client.audio.AudioCache;
+import com.projecthawkthorne.client.display.Assets;
 import com.projecthawkthorne.client.display.Node;
 import com.projecthawkthorne.client.display.Player;
 import com.projecthawkthorne.socket.Client;
@@ -36,6 +37,8 @@ public class HawkthorneGame extends Game {
 
 	@Override
 	public void create() {
+		Assets.load();
+		
 		long startTime, endTime;
 		font = new BitmapFont();
 		font.setColor(Color.RED);
