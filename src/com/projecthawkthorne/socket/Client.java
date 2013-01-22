@@ -67,6 +67,9 @@ public class Client {
             //Client should only assign his first level by himself, the rest
             this.level = "town";
             this.world.put(this.level, new HashMap<String,Node>());
+            //YIKES... which do i want
+            message = this.getEntity()+" enter "+level;
+            this.send(message);
             message = this.getEntity()+" enterLevel "+level;
             this.send(message);
             message = this.getEntity()+" update "+level;
@@ -80,9 +83,7 @@ public class Client {
     }
 
 	private void initKeys() {
-		// TODO Auto-generated method stub
-
-        keyDown.put(Keys.LEFT, false);
+		keyDown.put(Keys.LEFT, false);
         keyDown.put(Keys.RIGHT, false);
         keyDown.put(Keys.UP, false);
         keyDown.put(Keys.DOWN, false);
@@ -90,8 +91,7 @@ public class Client {
         keyDown.put(Keys.SHIFT_LEFT, false);
         keyDown.put(Keys.ESCAPE, false);
         keyDown.put(Keys.ENTER, false);
-
-	}
+}
 
 	/**
      * returns one identical server every time

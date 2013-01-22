@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,6 +18,8 @@ import com.badlogic.gdx.graphics.g2d.tiled.TiledLoader;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.tests.utils.OrthoCamController;
+import com.badlogic.gdx.tiledmappacker.TiledMapPacker;
+import com.badlogic.gdx.tiledmappacker.TiledMapPacker.TiledMapPackerSettings;
 import com.projecthawkthorne.client.audio.AudioCache;
 import com.projecthawkthorne.client.display.Assets;
 import com.projecthawkthorne.client.display.Node;
@@ -32,7 +35,8 @@ public class HawkthorneGame extends Game {
 	private TileAtlas atlas;
 	private TileMapRenderer tileMapRenderer;
 	private OrthographicCamera cam;
-	private OrthoCamController camController;
+	private OrthographicCamera mapCam;
+	//private OrthoCamController camController;
 	private Vector2 maxCamPosition = new Vector2();
 
 	@Override
@@ -60,14 +64,16 @@ public class HawkthorneGame extends Game {
 		endTime = System.currentTimeMillis();
 		System.out.println("Loaded map in " + (endTime - startTime) + "ms");
 
-		//atlas = new TileAtlas(map, baseDir);
+		atlas = new TileAtlas(map, baseDir);
 
-		int blockWidth = map.tileWidth;
-		int blockHeight = map.tileHeight;
+		//not sure why right now, but these determine how far you can go before
+		// the tiles disappear
+		int blockWidth = map.tileWidth*2;
+		int blockHeight = map.tileHeight*2;
 
 		startTime = System.currentTimeMillis();
 
-		//tileMapRenderer = new TileMapRenderer(map, atlas, blockWidth, blockHeight, 16, 16);
+		tileMapRenderer = new TileMapRenderer(map, atlas, blockWidth, blockHeight, 24, 24);
 		endTime = System.currentTimeMillis();
 		System.out.println("Created cache in " + (endTime - startTime) + "mS");
 
@@ -82,13 +88,18 @@ public class HawkthorneGame extends Game {
 		//float aspectRatio = (float)Gdx.graphics.getWidth() / (float)Gdx.graphics.getHeight();
 		//cam = new OrthographicCamera(100f * aspectRatio, 100f);
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		mapCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		cam.setToOrtho(true,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		mapCam.setToOrtho(false,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		float camX = 0;//this.client.players.get(this.client.getEntity()).x;
-		float camY = 0;//this.client.players.get(this.client.getEntity()).y;
+		float camX = 200;//this.client.players.get(this.client.getEntity()).x;
+		float camY = 200;//this.client.players.get(this.client.getEntity()).y;
 		
-		cam.position.set(camX, camY, 40);
-		//cam.position.set(tileMapRenderer.getMapWidthUnits() / 2, tileMapRenderer.getMapHeightUnits() / 2, 0);
+		//cam.position.set(camX, camY, 40);
+		cam.position.set(tileMapRenderer.getMapWidthUnits() / 2, tileMapRenderer.getMapHeightUnits() / 2, 0);
+		mapCam.position.set(tileMapRenderer.getMapWidthUnits() / 2, tileMapRenderer.getMapHeightUnits() / 2, 0);
+		cam.zoom = 0.5f;
+		mapCam.zoom = 0.5f;
 		//camController = new OrthoCamController(cam);
 		//Gdx.input.setInputProcessor(camController);
 
@@ -105,18 +116,36 @@ public class HawkthorneGame extends Game {
 	public void render() {
 		float camX;
 		float camY;
-		Gdx.gl.glClearColor( 0, 0, 0.2f, 1 );
+		float r = Integer.parseInt(map.properties.get("red"))/255.0f;
+		float g = Integer.parseInt(map.properties.get("green"))/255.0f;
+		float b = Integer.parseInt(map.properties.get("blue"))/255.0f;
+		Gdx.gl.glClearColor( r, g, b, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 		try{
 			Player player = this.client.players.get(this.client.getEntity());
 			camX = player.x;
-			camY = player.y;
+			camY = tileMapRenderer.getMapHeightUnits() / 2;
 		}catch(Exception e){
 			camX = 0;
 			camY = 0;
 		}
 		
-		cam.position.set(camX, camY, 40);
+		camX = bound(camX,cam.zoom*cam.viewportWidth/2,map.width*24-cam.zoom*cam.viewportWidth/2);
+		//cam.position.set(tileMapRenderer.getMapWidthUnits() / 2, tileMapRenderer.getMapHeightUnits() / 2, 0);
+		cam.position.set(camX, camY, 0);
+		mapCam.position.set(camX, camY, 0);
+		cam.update(true);
+		mapCam.update(true);
+		
+
+		tileMapRenderer.render(mapCam);
+		//tileMapRenderer.render();
+		//long tenSeconds = 10000;
+		if(System.currentTimeMillis()%10000==0){
+			int foo = 47;
+			//cam.y = foo;
+		}
+		//camController.keyDown(Keys.RIGHT);
 		client.update();
 		
 		//receive a new bundle
@@ -135,6 +164,18 @@ public class HawkthorneGame extends Game {
 		//Gdx.gl.glEnable(GL10.GL_CULL_FACE);
 	}
 
+	private float bound(float camX, float f, float g) {
+		// TODO Auto-generated method stub
+		if(camX<f && camX <g){
+			return Math.min(f, g);
+		}else if(camX>f && camX >g){
+			return Math.max(f, g);
+		}else{
+			return camX;
+		}
+		
+	}
+
 	private void processBundle(DatagramPacket bundle) {
 		if(bundle==null){return;}
 		byte[] msg = bundle.getData();
@@ -143,15 +184,9 @@ public class HawkthorneGame extends Game {
 		String cmd = tokens[1];
 		String params = tokens[2].trim();
 		if(cmd.equals("updatePlayer")){
-			Player p = Player.unpack(params);
-			this.client.players.put(p.id, p);
+			Player.unpack(this.client.players,params);
 		}else if(cmd.equals("updateObject")){
-			Node n = Node.unpack(params);
-			HashMap<String, Node> levelObjs = this.client.world.get(n.levelName);
-			if(levelObjs==null){
-				levelObjs = this.client.world.put(n.levelName, new HashMap<String,Node>());
-			}
-			levelObjs.put(n.id, n);
+		    Node.unpack(this.client.world,params);
 	    }else if(cmd.equals("stateSwitch")){
 			String[] chunks = params.split(" ");
 			String fromLevel = chunks[0];
@@ -169,7 +204,6 @@ public class HawkthorneGame extends Game {
 	}
 
 	private void stateSwitch(String fromLevel, String toLevel) {
-		// TODO Auto-generated method stub
 		this.client.setLevel(toLevel);
 	}
 

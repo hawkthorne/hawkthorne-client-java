@@ -17,6 +17,6 @@ public class AudioCache {
 			s = Gdx.audio.newSound(Gdx.files.internal("data/audio/sfx/"+soundFile+".ogg"));
 			cache.put(soundFile, s);
 		}
-		s.play();
+		s.play(0.3f);
 	}
 }

@@ -1,0 +1,202 @@
+#
+# An unexpected error has been detected by Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x77388755, pid=3000, tid=3192
+#
+# Java VM: Java HotSpot(TM) Client VM (10.0-b23 mixed mode windows-x86)
+# Problematic frame:
+# C  [ntdll.dll+0x68755]
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0c4ee400):  JavaThread "LWJGL Application" [_thread_in_native, id=3192, stack(0x0ca70000,0x0cac0000)]
+
+siginfo: ExceptionCode=0xc0000005, reading address 0x43898000
+
+Registers:
+EAX=0x00890000, EBX=0x00002711, ECX=0x0c661fd8, EDX=0x43898000
+ESP=0x0cabf040, EBP=0x0cabf118, ESI=0x0c661fd0, EDI=0x43950000
+EIP=0x77388755, EFLAGS=0x00010212
+
+Top of Stack: (sp=0x0cabf040)
+0x0cabf040:   7b62c68d 00890000 00000000 00000000
+0x0cabf050:   00893ef8 00000000 000000a8 000a0008
+0x0cabf060:   77389bcc 0cabf340 36002711 003a0043
+0x0cabf070:   0055005c 00893ef8 00730072 0c661fd8
+0x0cabf080:   00000003 00690072 000007ff 0044005c
+0x0cabf090:   0063006f 006d0075 006e0065 00730074
+0x0cabf0a0:   0047005c 00000000 21000829 43898000
+0x0cabf0b0:   0069006c 00670062 00000000 0067005c 
+
+Instructions: (pc=0x77388755)
+0x77388745:   00 00 8d 4e 08 8b 39 89 7d ac 8b 56 0c 89 55 94
+0x77388755:   8b 12 8b 7f 04 3b d7 0f 85 a4 4d 00 00 3b d1 0f 
+
+
+Stack: [0x0ca70000,0x0cac0000],  sp=0x0cabf040,  free space=316k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [ntdll.dll+0x68755]
+C  [ntdll.dll+0x68592]
+C  [msvcrt.dll+0x9e04]
+C  [msvcrt.dll+0xac75]
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::Interpreter
+v  ~BufferBlob::StubRoutines (1)
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x0c4d1400 JavaThread "LWJGL Timer" daemon [_thread_blocked, id=5552, stack(0x0d3f0000,0x0d440000)]
+  0x02398800 JavaThread "DestroyJavaVM" [_thread_blocked, id=2540, stack(0x001d0000,0x00220000)]
+=>0x0c4ee400 JavaThread "LWJGL Application" [_thread_in_native, id=3192, stack(0x0ca70000,0x0cac0000)]
+  0x01b85400 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=5260, stack(0x02340000,0x02390000)]
+  0x01b79c00 JavaThread "CompilerThread0" daemon [_thread_blocked, id=4644, stack(0x022f0000,0x02340000)]
+  0x01b79400 JavaThread "Attach Listener" daemon [_thread_blocked, id=2544, stack(0x022a0000,0x022f0000)]
+  0x01b70c00 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=4352, stack(0x02250000,0x022a0000)]
+  0x01b5f800 JavaThread "Finalizer" daemon [_thread_blocked, id=5216, stack(0x02200000,0x02250000)]
+  0x01b5b400 JavaThread "Reference Handler" daemon [_thread_blocked, id=4440, stack(0x016b0000,0x01700000)]
+
+Other Threads:
+  0x01b56c00 VMThread [stack: 0x00800000,0x00850000] [id=5408]
+  0x01b86400 WatcherThread [stack: 0x0c3a0000,0x0c3f0000] [id=4996]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ def new generation   total 960K, used 925K [0x043a0000, 0x044a0000, 0x04880000)
+  eden space 896K,  99% used [0x043a0000, 0x0447fd70, 0x04480000)
+  from space 64K,  46% used [0x04490000, 0x04497710, 0x044a0000)
+  to   space 64K,   0% used [0x04480000, 0x04480000, 0x04490000)
+ tenured generation   total 4096K, used 736K [0x04880000, 0x04c80000, 0x083a0000)
+   the space 4096K,  17% used [0x04880000, 0x049380a8, 0x04938200, 0x04c80000)
+ compacting perm gen  total 12288K, used 4676K [0x083a0000, 0x08fa0000, 0x0c3a0000)
+   the space 12288K,  38% used [0x083a0000, 0x088311d8, 0x08831200, 0x08fa0000)
+No shared spaces configured.
+
+Dynamic libraries:
+0x00400000 - 0x00423000 	C:\Users\Patrick\Downloads\eclipse-jee-juno-SR1-win32\eclipse\jre\bin\javaw.exe
+0x77320000 - 0x77448000 	C:\Windows\system32\ntdll.dll
+0x768d0000 - 0x769ac000 	C:\Windows\system32\kernel32.dll
+0x766a0000 - 0x76766000 	C:\Windows\system32\ADVAPI32.dll
+0x76e20000 - 0x76ee2000 	C:\Windows\system32\RPCRT4.dll
+0x76a90000 - 0x76b2d000 	C:\Windows\system32\USER32.dll
+0x77450000 - 0x7749b000 	C:\Windows\system32\GDI32.dll
+0x77080000 - 0x7709e000 	C:\Windows\system32\IMM32.DLL
+0x77100000 - 0x771c8000 	C:\Windows\system32\MSCTF.dll
+0x76ce0000 - 0x76d8a000 	C:\Windows\system32\msvcrt.dll
+0x76e10000 - 0x76e19000 	C:\Windows\system32\LPK.DLL
+0x769b0000 - 0x76a2d000 	C:\Windows\system32\USP10.dll
+0x7c340000 - 0x7c396000 	C:\Users\Patrick\Downloads\eclipse-jee-juno-SR1-win32\eclipse\jre\bin\msvcr71.dll
+0x6d7c0000 - 0x6da10000 	C:\Users\Patrick\Downloads\eclipse-jee-juno-SR1-win32\eclipse\jre\bin\client\jvm.dll
+0x74680000 - 0x746b2000 	C:\Windows\system32\WINMM.dll
+0x771d0000 - 0x77314000 	C:\Windows\system32\ole32.dll
+0x774a0000 - 0x7752d000 	C:\Windows\system32\OLEAUT32.dll
+0x74640000 - 0x74679000 	C:\Windows\system32\OLEACC.dll
+0x759c0000 - 0x759ec000 	C:\Windows\system32\apphelp.dll
+0x6d270000 - 0x6d278000 	C:\Users\Patrick\Downloads\eclipse-jee-juno-SR1-win32\eclipse\jre\bin\hpi.dll
+0x75b80000 - 0x75b87000 	C:\Windows\system32\PSAPI.DLL
+0x6d770000 - 0x6d77c000 	C:\Users\Patrick\Downloads\eclipse-jee-juno-SR1-win32\eclipse\jre\bin\verify.dll
+0x6d310000 - 0x6d32f000 	C:\Users\Patrick\Downloads\eclipse-jee-juno-SR1-win32\eclipse\jre\bin\java.dll
+0x6d7b0000 - 0x6d7bf000 	C:\Users\Patrick\Downloads\eclipse-jee-juno-SR1-win32\eclipse\jre\bin\zip.dll
+0x6d570000 - 0x6d583000 	C:\Users\Patrick\Downloads\eclipse-jee-juno-SR1-win32\eclipse\jre\bin\net.dll
+0x76cb0000 - 0x76cdd000 	C:\Windows\system32\WS2_32.dll
+0x76bc0000 - 0x76bc6000 	C:\Windows\system32\NSI.dll
+0x751d0000 - 0x7520b000 	C:\Windows\system32\mswsock.dll
+0x75230000 - 0x75235000 	C:\Windows\System32\wship6.dll
+0x74dc0000 - 0x74dc5000 	C:\Windows\System32\wshtcpip.dll
+0x741f0000 - 0x741ff000 	C:\Windows\system32\NLAapi.dll
+0x75430000 - 0x75449000 	C:\Windows\system32\IPHLPAPI.DLL
+0x753f0000 - 0x75425000 	C:\Windows\system32\dhcpcsvc.DLL
+0x75670000 - 0x7569c000 	C:\Windows\system32\DNSAPI.dll
+0x75a20000 - 0x75a34000 	C:\Windows\system32\Secur32.dll
+0x753e0000 - 0x753e7000 	C:\Windows\system32\WINNSI.DLL
+0x753b0000 - 0x753d1000 	C:\Windows\system32\dhcpcsvc6.DLL
+0x719c0000 - 0x719cf000 	C:\Windows\system32\napinsp.dll
+0x716d0000 - 0x716e2000 	C:\Windows\system32\pnrpnsp.dll
+0x719b0000 - 0x719b8000 	C:\Windows\System32\winrnr.dll
+0x76a40000 - 0x76a8a000 	C:\Windows\system32\WLDAP32.dll
+0x72390000 - 0x72396000 	C:\Windows\system32\rasadhlp.dll
+0x6cec0000 - 0x6cf3f000 	C:\Users\Patrick\AppData\Local\Temp\libgdxPatrick\3299115951\gdx.dll
+0x10000000 - 0x1004c000 	C:\Users\Patrick\AppData\Local\Temp\libgdxPatrick\3299115951\lwjgl.dll
+0x643e0000 - 0x644ab000 	C:\Windows\system32\OPENGL32.dll
+0x733c0000 - 0x733e3000 	C:\Windows\system32\GLU32.dll
+0x62c80000 - 0x62d65000 	C:\Windows\system32\DDRAW.dll
+0x652f0000 - 0x652f6000 	C:\Windows\system32\DCIMAN32.dll
+0x76ef0000 - 0x7707a000 	C:\Windows\system32\SETUPAPI.dll
+0x72490000 - 0x7249c000 	C:\Windows\system32\dwmapi.dll
+0x74e90000 - 0x74e98000 	C:\Windows\system32\VERSION.dll
+0x73540000 - 0x735c5000 	C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.6001.18523_none_886c608850a2f36f\COMCTL32.dll
+0x0c800000 - 0x0c867000 	C:\Users\Patrick\AppData\Local\Temp\libgdxPatrick\3299115951\OpenAL32.dll
+0x75b90000 - 0x766a0000 	C:\Windows\system32\SHELL32.dll
+0x770a0000 - 0x770f8000 	C:\Windows\system32\SHLWAPI.dll
+0x74910000 - 0x74aae000 	C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.6001.18523_none_5cdd65e20837faf2\comctl32.dll
+0x74c00000 - 0x74c3f000 	C:\Windows\system32\uxtheme.dll
+0x60d20000 - 0x60d88000 	C:\PROGRAM FILES\NORTON INTERNET SECURITY\ENGINE\18.7.2.3\ASOEHOOK.DLL
+0x71820000 - 0x718c3000 	C:\Windows\WinSxS\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.6161_none_50934f2ebcb7eb57\MSVCR90.dll
+0x71a80000 - 0x71b0e000 	C:\Windows\WinSxS\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.6161_none_50934f2ebcb7eb57\MSVCP90.dll
+0x76b30000 - 0x76bb4000 	C:\Windows\system32\CLBCatQ.DLL
+0x66f20000 - 0x66f90000 	C:\Windows\system32\dsound.dll
+0x74ea0000 - 0x74eba000 	C:\Windows\system32\POWRPROF.dll
+0x74590000 - 0x745b7000 	C:\Windows\System32\MMDevApi.dll
+0x736e0000 - 0x73701000 	C:\Windows\system32\AUDIOSES.DLL
+0x73670000 - 0x736d6000 	C:\Windows\system32\audioeng.dll
+0x74ab0000 - 0x74ab7000 	C:\Windows\system32\AVRT.dll
+0x74cf0000 - 0x74d1d000 	C:\Windows\system32\WINTRUST.dll
+0x754d0000 - 0x755c1000 	C:\Windows\system32\CRYPT32.dll
+0x75630000 - 0x75642000 	C:\Windows\system32\MSASN1.dll
+0x75a40000 - 0x75a5e000 	C:\Windows\system32\USERENV.dll
+0x768a0000 - 0x768c9000 	C:\Windows\system32\imagehlp.dll
+0x0dd70000 - 0x0e814000 	C:\Windows\system32\ig4icd32.dll
+0x653f0000 - 0x65452000 	C:\Windows\system32\mscms.dll
+0x71de0000 - 0x71e22000 	C:\Windows\system32\WINSPOOL.DRV
+0x66cd0000 - 0x66d08000 	C:\Windows\system32\icm32.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=Cp1252 
+java_command: com.projecthawkthorne.client.Main
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:/Users/Patrick/Downloads/eclipse-jee-juno-SR1-win32/eclipse/jre/bin/client;C:/Users/Patrick/Downloads/eclipse-jee-juno-SR1-win32/eclipse/jre/bin;C:/Users/Patrick/Downloads/eclipse-jee-juno-SR1-win32/eclipse/jre/lib/i386;C:\Users\Patrick\Downloads\tmx2lua.windows32;C:\Qt\Qt5.0.0-rc1\5.0.0-rc1\msvc2010\bin\;C:\Program Files\Heroku\bin;C:\Program Files\ruby-1.9.2\bin;C:\Program Files\git\bin;C:\Program Files\git\cmd;C:\Program Files\SSH Communications Security\SSH Secure Shell;C:\Users\Patrick\Downloads\tmx2lua.windows32;C:\Program Files\LOVE;C:\Qt\Qt5.0.0-rc1\5.0.0-rc1\msvc2010\bin;C:\Program Files\GnuWin32\bin;C:\Windows\system32;
+USERNAME=Patrick
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=x86 Family 6 Model 23 Stepping 10, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows Vista Build 6001 Service Pack 1
+
+CPU:total 2 (2 cores per cpu, 1 threads per core) family 6 model 7 stepping 10, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3
+
+Memory: 4k page, physical 2097151k(1791988k free), swap 4194303k(3246668k free)
+
+vm_info: Java HotSpot(TM) Client VM (10.0-b23) for windows-x86 JRE (1.6.0_07-b06), built on Jun 10 2008 01:14:11 by "java_re" with MS VC++ 7.1
+
+time: Tue Jan 22 05:25:00 2013
+elapsed time: 2 seconds
+

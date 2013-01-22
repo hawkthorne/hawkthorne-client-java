@@ -4,6 +4,7 @@
  */
 package com.projecthawkthorne.client.display;
 
+import java.io.File;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -25,6 +26,7 @@ public class Node {
 	protected final static String NULL = "?";
 	public static final String IMAGES_FOLDER = "data/images/";
 	public static final String MAPS_FOLDER = "data/maps/";
+	public static final String MAPS_OUTPUT_FOLDER = "data/packs/";
 	public float x;
 	public float y;
 	public float width;
@@ -48,10 +50,12 @@ public class Node {
 	protected int srcHeight = 10;
 	public String id;
 	protected Direction direction;
-	private TextureRegion objRegion;
+	//TODO:remove static modifier.
+	//for some reason it's needed right now
+	//to progress animation. go figure
+	private static final long creationTime = System.currentTimeMillis();
 
 	/**
-	 * 
 	 * @param type
 	 * @param name
 	 */
@@ -60,19 +64,49 @@ public class Node {
 		this.type = type;
 	}
 
-	
+
 	public void draw(SpriteBatch batch) {
 		Animation anim;
 		try{
-		anim = Assets.nodes.get(this.type).
-				get(this.name).
-				get(this.state);
-         		batch.draw(anim.getKeyFrame(1.0f), this.x, this.y);
+			if(this instanceof Player){
+				Player player = (Player) this;
+				anim = Assets.characters.get(player.name).
+						get(player.character.costume).
+						get(player.state);
+			}else{
+				anim = Assets.nodes.get(this.type).
+						get(this.name).
+						get(this.state);
+			}
+			long nowTime = Node.getCurrentTime();
+			long thenTime = this.getCreationTime();
+			float stateTime = Node.convertToSeconds(nowTime-thenTime);
+			TextureRegion tr = anim.getKeyFrame(stateTime);
+			System.out.println("===="+stateTime);
+			if(this.direction==Direction.LEFT){
+				batch.draw(tr, this.x, this.y+tr.getRegionHeight(), tr.getRegionWidth(),-tr.getRegionHeight());
+			}else{
+				batch.draw(tr, this.x+tr.getRegionWidth(), this.y+tr.getRegionHeight(), -tr.getRegionWidth(), -tr.getRegionHeight());
+			}
+			
+			System.out.println(this.type);
+			System.out.println(this.name);
+			System.out.println(this.state);
+			System.out.println();
 		}catch(NullPointerException e){
-			System.err.println(this.type);
-			System.err.println(this.name);
-			System.err.println(this.state);
-			System.err.println();
+			if(this instanceof Player){
+				Player player = (Player) this;
+				System.err.println(player.type);
+				System.err.println(player.name);
+				System.err.println(player.character.costume);
+				System.err.println(player.state);
+				System.err.println();
+			}else{
+				System.err.println(this.type);
+				System.err.println(this.name);
+				System.err.println(this.state);
+				System.err.println();
+			}
 		}
 		//TODO:instantiate the font once
 		BitmapFont font = new BitmapFont(true);
@@ -82,14 +116,40 @@ public class Node {
 				+ this.id + "\n"
 				+ this.name + "\n"
 				+ this.type;
-		font.drawMultiLine(batch, tmp, this.x, this.y);
+		font.drawMultiLine(batch, tmp, this.x, this.y+30);
 	}
 
-	public static Node unpack(String params) {
-		// TODO Auto-generated method stub
-		Node n=new Node(null,null);
+	private static float convertToSeconds(long ms) {
+		return ms/1000.0f;
+	}
+
+
+	private long getCreationTime() {
+		return creationTime;
+	}
+
+
+	/**
+	 * current time since Jan 1, 1970 in milliseconds
+	 * @return
+	 */
+	private static long getCurrentTime() {
+		return System.currentTimeMillis();
+	}
+
+
+	public static Node unpack(HashMap<String, HashMap<String, Node>> world, String params) {
+		String levelName = null;
+		String id = null;
+		float x = 0;
+		float y = 0;
+		String state = "default";
+		Direction direction = Direction.RIGHT;
+		int position = 1;
+		String name = null;
+		String type = null;
+
 		String[] nodeArgs = params.split("["+NULL+"]");
-		
 		for(int i=0; i<nodeArgs.length;i++){
 			String[] chunks = nodeArgs[i].split(ONE);
 			if(chunks.length!=3){
@@ -100,28 +160,44 @@ public class Node {
 			String argValue = chunks[2];
 
 			if(argName.equals("level")){
-				n.levelName = argValue;
+				levelName = argValue;
 			}else if(argName.equals("id")){
-				n.id = argValue;
+				id = argValue;
 			}else if(argName.equals("x")){
-				n.x = Float.parseFloat(argValue);
+				x = Float.parseFloat(argValue);
 			}else if(argName.equals("y")){
-				n.y = Float.parseFloat(argValue);
+				y = Float.parseFloat(argValue);
 			}else if(argName.equals("state")){
-				n.state = argValue;
+				state = argValue;
 			}else if(argName.equals("direction")){
-				n.direction = Direction.valueOf(argValue.toUpperCase());
+				direction = Direction.valueOf(argValue.toUpperCase());
 			}else if(argName.equals("position")){
-				n.position = Integer.parseInt(argValue);
+				position = Integer.parseInt(argValue);
 			}else if(argName.equals("name")){
-				n.name = argValue;
+				name = argValue;
 			}else if(argName.equals("type")){
-				n.type = argValue;
+				type = argValue;
 			}else{
 				throw new UnsupportedOperationException("argName=="+argName+", argValue=="+argValue);
 			}
-			
+
 		}
+		
+		HashMap<String, Node> levelObjs = world.get(levelName);
+		Node n = null;
+		n = levelObjs.get(id);
+		if(n==null){
+			n = new Node(type,name);
+			levelObjs.put(id, n);
+		}
+
+		n.x = x;
+		n.y = y;
+		n.state = state;
+		n.direction = direction;
+		n.position = position;
+		n.name = name;
+		n.type = type;
 		return n;
 	}
 

@@ -63,9 +63,15 @@ public class Assets {
 	
 	private static Texture enemyTexture;
 	//key is a state
-	public static Map<String, Animation> acorn;
-	public static Map<String, Map<String, Animation>> enemy;
+	private static Map<String, Animation> acorn;
+	private static Map<String, Animation> hippy;
+	private static Map<String, Map<String, Animation>> enemy;
 	public static Map<String, Map<String, Map<String, Animation>>> nodes;
+
+	private static Texture abedBaseTexture;
+	private static Map<String, Animation> base;
+	private static Map<String, Map<String, Animation>> abed;
+	public static Map<String, Map<String, Map<String, Animation>>> characters;
 
 	public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -75,25 +81,65 @@ public class Assets {
 		//create blank nodes map
 		nodes = new HashMap<String, Map<String, Map<String,Animation>>>();
 		
-		//create each enemy
+		//create enemy list
 		enemyTexture = loadTexture("data/images/enemies.png");
+		enemy = new HashMap<String, Map<String, Animation>>();
+
+		//create each enemy
+		// 1) make new map
+		// 2) add animation states to it
+		// 3) add the map to the enemy mapp
 		acorn = new HashMap<String,Animation>();
-		acorn.put("default", new Animation(0.2f, 
+		acorn.put("default", new Animation(0.2f, Animation.LOOP,
 				new TextureRegion(enemyTexture, 40, 0, 20, 20),
-				new TextureRegion(enemyTexture, 60, 0, 20, 20), 
-				new TextureRegion(enemyTexture, 80, 0, 20, 20)));
-		acorn.put("rage", new Animation(0.2f,
+				new TextureRegion(enemyTexture, 60, 0, 20, 20),
+				new TextureRegion(enemyTexture, 80, 0, 20, 20)
+		));
+		acorn.put("attack", new Animation(0.2f, Animation.LOOP,
 				new TextureRegion(enemyTexture, 140, 0, 20, 20),
 				new TextureRegion(enemyTexture, 160, 0, 20, 20), 
-				new TextureRegion(enemyTexture, 180, 0, 20, 20)));
-		//create enemy list
-		enemy = new HashMap<String, Map<String, Animation>>();
-		
-		//add each enemy to the list
+				new TextureRegion(enemyTexture, 180, 0, 20, 20)
+		));
 		enemy.put("acorn",acorn);
 
+		hippy = new HashMap<String,Animation>();
+		hippy.put("default", new Animation(0.2f, Animation.LOOP,
+				new TextureRegion(enemyTexture, 94, 118, 47, 47),
+				new TextureRegion(enemyTexture, 141, 118, 47, 47)
+		));
+		hippy.put("attack", new Animation(0.2f, Animation.LOOP,
+				new TextureRegion(enemyTexture, 0, 118, 47, 47),
+				new TextureRegion(enemyTexture, 47, 118, 47, 47)
+		));
+		hippy.put("dying", new Animation(0.2f, Animation.NORMAL,
+				new TextureRegion(enemyTexture, 192, 118, 47, 47)
+		));
+		enemy.put("hippy",hippy);
+
+		
 		//add each node type to the node list
 		nodes.put("enemy",enemy);
+
+		
+		
+		abedBaseTexture = loadTexture("data/images/characters/abed/base.png");
+
+		characters = new HashMap<String,Map<String,Map<String,Animation>>>();
+		abed = new HashMap<String,Map<String,Animation>>();
+		base = new HashMap<String,Animation>();
+		base.put("idle", new Animation(0.2f, Animation.NORMAL,
+				new TextureRegion(abedBaseTexture, 0, 0, 48, 48)
+		));
+		base.put("walk", new Animation(0.2f, Animation.LOOP,
+				new TextureRegion(abedBaseTexture, 48, 0, 48, 48),
+				new TextureRegion(abedBaseTexture, 96, 0, 48, 48),
+				new TextureRegion(abedBaseTexture, 144, 0, 48, 48)
+		));
+		base.put("jump", new Animation(0.2f, Animation.NORMAL,
+				new TextureRegion(abedBaseTexture, 288, 0, 48, 48)
+		));
+		abed.put("base",base);
+		characters.put("abed",abed);
     }
 	
 	public static void playSound (Sound sound) {
