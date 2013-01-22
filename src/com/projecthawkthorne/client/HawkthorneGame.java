@@ -28,7 +28,7 @@ import com.projecthawkthorne.socket.Client;
 
 
 public class HawkthorneGame extends Game {
-	public static final String START_LEVEL = "frozencave";
+	public static final String START_LEVEL = "town";
 	Client client = Client.getSingleton();
 	private BitmapFont font;
 	private SpriteBatch spriteBatch;

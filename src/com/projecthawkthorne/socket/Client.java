@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -164,18 +165,25 @@ public class Client {
 		Iterator<Node> nit = this.world.get(this.level).values().iterator();
 
 		long curTime = System.currentTimeMillis();
+		try{
 		while(nit.hasNext()){
 			Node n = nit.next();
 			if(n.isMonitoring() && (n.getLastUpdate()-curTime)>MONITOR_THRESHOLD){
+				this.world.get(this.level).remove(n.id);
+			}else if(n.getState().equals("dying") || n.getState().equals("dead")){
 				this.world.get(this.level).remove(n.id);
 			}else{
 				n.draw(batch);
 			}
 		}
+		}catch(ConcurrentModificationException e){
+		}
 		
 		Iterator<Player> pit = this.players.values().iterator();
 		while(pit.hasNext()){
 			Player p = pit.next();
+			if(p==null){System.err.println("player is null");}
+			else if(p.levelName==null){System.err.println("player's level is null");}
 			if(p.levelName.equals(this.level)){
 				p.draw(batch);
 			}

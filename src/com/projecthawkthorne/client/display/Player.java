@@ -12,7 +12,6 @@ public class Player extends Node{
 	public Player(String type, String name) {
 		super("player", name);
 		character = new Character(name,"base");
-		// TODO Auto-generated constructor stub
 	}
 	public static Player unpack(HashMap<String,Player> players, String params){
 		// TODO remove player/node unpack redundancy
@@ -27,6 +26,7 @@ public class Player extends Node{
 		String costume = null;
 		String type = null;
 		
+		//split nodeArgs on each                     of NULL
 		String[] nodeArgs = params.split("["+NULL+"]");
 		for(int i=0; i<nodeArgs.length;i++){
 			String[] chunks = nodeArgs[i].split(ONE);

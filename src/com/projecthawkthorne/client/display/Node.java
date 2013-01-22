@@ -76,11 +76,11 @@ public class Node {
 				Player player = (Player) this;
 				anim = Assets.characters.get(player.name).
 						get(player.character.costume).
-						get(player.state);
+						get(player.getState());
 			}else{
 				anim = Assets.nodes.get(this.type).
 						get(this.name).
-						get(this.state);
+						get(this.getState());
 			}
 			long nowTime = Node.getCurrentTime();
 			long thenTime = this.getCreationTime();
@@ -93,24 +93,25 @@ public class Node {
 				batch.draw(tr, this.x+tr.getRegionWidth(), this.y+tr.getRegionHeight(), -tr.getRegionWidth(), -tr.getRegionHeight());
 			}
 			
+			System.out.println(this.id);
 			System.out.println(this.type);
 			System.out.println(this.name);
-			System.out.println(this.state);
-			System.out.println();
-		}catch(NullPointerException e){
 			if(this instanceof Player){
 				Player player = (Player) this;
-				System.err.println(player.type);
-				System.err.println(player.name);
-				System.err.println(player.character.costume);
-				System.err.println(player.state);
-				System.err.println();
-			}else{
-				System.err.println(this.type);
-				System.err.println(this.name);
-				System.err.println(this.state);
-				System.err.println();
+				System.out.println(player.character.costume);
 			}
+			System.out.println(this.getState());
+			System.out.println();
+		}catch(NullPointerException e){
+			System.err.println(this.id);
+			System.err.println(this.type);
+			System.err.println(this.name);
+			if(this instanceof Player){
+				Player player = (Player) this;
+				System.err.println(player.character.costume);
+			}
+			System.err.println(this.getState());
+			System.err.println();
 		}
 		//TODO:instantiate the font once
 		BitmapFont font = new BitmapFont(true);
@@ -196,6 +197,7 @@ public class Node {
 			levelObjs.put(id, n);
 		}
 
+		n.levelName = levelName;
 		n.x = x;
 		n.y = y;
 		n.state = state;
@@ -219,4 +221,8 @@ public class Node {
 		return monitor;
 	}
 
+
+	public String getState() {
+		return state;
+	}
 }
