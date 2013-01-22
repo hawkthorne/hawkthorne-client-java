@@ -18,6 +18,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GLU;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.projecthawkthorne.client.HawkthorneGame;
 import com.projecthawkthorne.client.display.Character;
 import com.projecthawkthorne.client.display.Node;
 import com.projecthawkthorne.client.display.Player;
@@ -33,11 +34,12 @@ public class Client {
 	public HashMap<String,HashMap<String,Node>> world;
 	
     //TODO: create overworld
-	private String level = "town";
+	private String level = HawkthorneGame.START_LEVEL;
 
     //private byte[] receiveData = new byte[1024];
     //private byte[] sendData = new byte[1024];
     private static final Client singleton= new Client();
+	private static final long MONITOR_THRESHOLD = 2000;
 	private static int serverPort;
 	private static Character clientCharacter;
         
@@ -65,7 +67,7 @@ public class Client {
             
 
             //Client should only assign his first level by himself, the rest
-            this.level = "town";
+            this.level = HawkthorneGame.START_LEVEL;
             this.world.put(this.level, new HashMap<String,Node>());
             //YIKES... which do i want
             message = this.getEntity()+" enter "+level;
@@ -160,9 +162,15 @@ public class Client {
 			throw new NullPointerException("world has no level by the name: "+this.level);
 		}
 		Iterator<Node> nit = this.world.get(this.level).values().iterator();
+
+		long curTime = System.currentTimeMillis();
 		while(nit.hasNext()){
 			Node n = nit.next();
-			n.draw(batch);
+			if(n.isMonitoring() && (n.getLastUpdate()-curTime)>MONITOR_THRESHOLD){
+				this.world.get(this.level).remove(n.id);
+			}else{
+				n.draw(batch);
+			}
 		}
 		
 		Iterator<Player> pit = this.players.values().iterator();

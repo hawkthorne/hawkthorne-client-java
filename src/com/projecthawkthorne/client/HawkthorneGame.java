@@ -28,6 +28,7 @@ import com.projecthawkthorne.socket.Client;
 
 
 public class HawkthorneGame extends Game {
+	public static final String START_LEVEL = "frozencave";
 	Client client = Client.getSingleton();
 	private BitmapFont font;
 	private SpriteBatch spriteBatch;
@@ -53,7 +54,7 @@ public class HawkthorneGame extends Game {
 		final String path = "data/maps/";
 		
 		//TODO:remove town default
-		String mapname = "town";
+		String mapname = START_LEVEL;
 
 		
 		FileHandle mapHandle = Gdx.files.internal(path + mapname + ".tmx");
@@ -64,6 +65,7 @@ public class HawkthorneGame extends Game {
 		endTime = System.currentTimeMillis();
 		System.out.println("Loaded map in " + (endTime - startTime) + "ms");
 
+		AudioCache.playMusic(map.properties.get("soundtrack"));
 		atlas = new TileAtlas(map, baseDir);
 
 		//not sure why right now, but these determine how far you can go before
@@ -116,15 +118,20 @@ public class HawkthorneGame extends Game {
 	public void render() {
 		float camX;
 		float camY;
-		float r = Integer.parseInt(map.properties.get("red"))/255.0f;
-		float g = Integer.parseInt(map.properties.get("green"))/255.0f;
-		float b = Integer.parseInt(map.properties.get("blue"))/255.0f;
-		Gdx.gl.glClearColor( r, g, b, 1 );
+		try{
+			float r = Integer.parseInt(map.properties.get("red"))/255.0f;
+			float g = Integer.parseInt(map.properties.get("green"))/255.0f;
+			float b = Integer.parseInt(map.properties.get("blue"))/255.0f;
+			Gdx.gl.glClearColor( r, g, b, 1 );
+		}catch(Exception e){
+			Gdx.gl.glClearColor( 255, 255, 255, 1 );			
+		}
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 		try{
 			Player player = this.client.players.get(this.client.getEntity());
 			camX = player.x;
-			camY = tileMapRenderer.getMapHeightUnits() / 2;
+			int mapHeight = tileMapRenderer.getMapHeightUnits() / 2;
+			camY = mapHeight;
 		}catch(Exception e){
 			camX = 0;
 			camY = 0;
@@ -198,7 +205,7 @@ public class HawkthorneGame extends Game {
 				this.client.players.get(entity).levelName = toLevel;
 			}
 		}else if(cmd.equals("sound")){
-			AudioCache.play(params);
+			AudioCache.playSfx(params);
 		}
 		
 	}

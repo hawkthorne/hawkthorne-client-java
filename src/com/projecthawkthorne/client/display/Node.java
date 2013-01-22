@@ -54,6 +54,10 @@ public class Node {
 	//for some reason it's needed right now
 	//to progress animation. go figure
 	private static final long creationTime = System.currentTimeMillis();
+	private long lastUpdate = System.currentTimeMillis();
+	//TODO:implement a situation without constant monitoring
+	private boolean monitor = true;	
+	
 
 	/**
 	 * @param type
@@ -188,6 +192,7 @@ public class Node {
 		n = levelObjs.get(id);
 		if(n==null){
 			n = new Node(type,name);
+			n.id = id;
 			levelObjs.put(id, n);
 		}
 
@@ -198,8 +203,20 @@ public class Node {
 		n.position = position;
 		n.name = name;
 		n.type = type;
+		n.resetUpdateTime();
 		return n;
 	}
 
+
+	private void resetUpdateTime() {
+		this.lastUpdate = System.currentTimeMillis();
+	}
+	public long getLastUpdate(){
+		return this.lastUpdate;
+	}
+
+	public boolean isMonitoring(){
+		return monitor;
+	}
 
 }

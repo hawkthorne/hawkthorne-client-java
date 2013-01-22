@@ -72,6 +72,11 @@ public class Assets {
 	private static Map<String, Animation> base;
 	private static Map<String, Map<String, Animation>> abed;
 	public static Map<String, Map<String, Map<String, Animation>>> characters;
+	private static Texture materialTexture;
+	private static HashMap<String, Map<String, Animation>> material;
+	private static HashMap<String, Animation> leaf;
+	private static HashMap<String, Animation> rock;
+	private static HashMap<String, Animation> stick;
 
 	public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -117,9 +122,33 @@ public class Assets {
 		enemy.put("hippy",hippy);
 
 		
+		materialTexture = loadTexture("data/images/materials.png");
+		material = new HashMap<String, Map<String, Animation>>();
+		
+
+
+		leaf = new HashMap<String,Animation>();
+		leaf.put("default", new Animation(0.2f, Animation.NORMAL,
+				new TextureRegion(materialTexture, 0, 0, 24, 24)
+		));
+		material.put("leaf", leaf);
+		rock = new HashMap<String,Animation>();
+		rock.put("default", new Animation(0.2f, Animation.NORMAL,
+				new TextureRegion(materialTexture, 24, 0, 24, 24)
+		));
+		material.put("rock", rock);
+		stick = new HashMap<String,Animation>();
+		stick.put("default", new Animation(0.2f, Animation.NORMAL,
+				new TextureRegion(materialTexture, 48, 0, 24, 24)
+		));
+		material.put("stick", stick);
+
+		
+		
 		//add each node type to the node list
 		nodes.put("enemy",enemy);
-
+		nodes.put("material",material);
+		
 		
 		
 		abedBaseTexture = loadTexture("data/images/characters/abed/base.png");
@@ -145,4 +174,5 @@ public class Assets {
 	public static void playSound (Sound sound) {
 		sound.play(1);
 	}
+
 }

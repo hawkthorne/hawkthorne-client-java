@@ -7,16 +7,28 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 public class AudioCache {
-    private static Map<String,Sound> cache = new HashMap<String,Sound>();
+    private static Map<String,Sound> sfxCache = new HashMap<String,Sound>();
+    private static Map<String,Sound> musicCache = new HashMap<String,Sound>();
 
-	public static void play(String soundFile){
+	public static void playSfx(String soundFile){
 		Sound s;
-		if(cache.containsKey(soundFile)){
-			s = cache.get(soundFile);
+		if(sfxCache.containsKey(soundFile)){
+			s = sfxCache.get(soundFile);
 		}else{
 			s = Gdx.audio.newSound(Gdx.files.internal("data/audio/sfx/"+soundFile+".ogg"));
-			cache.put(soundFile, s);
+			sfxCache.put(soundFile, s);
 		}
 		s.play(0.3f);
+	}
+
+	public static void playMusic(String soundFile) {
+		Sound s;
+		if(musicCache.containsKey(soundFile)){
+			s = musicCache.get(soundFile);
+		}else{
+			s = Gdx.audio.newSound(Gdx.files.internal("data/audio/music/"+soundFile+".ogg"));
+			musicCache.put(soundFile, s);
+		}
+		s.loop(0.15f);
 	}
 }

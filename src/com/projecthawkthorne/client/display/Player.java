@@ -66,6 +66,7 @@ public class Player extends Node{
 		Player p = players.get(id);
 		if(p==null){
 			p = new Player(type,name);
+			p.id = id;
 			players.put(id, p);
 		}
 
