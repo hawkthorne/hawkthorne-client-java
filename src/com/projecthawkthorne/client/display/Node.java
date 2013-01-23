@@ -98,7 +98,7 @@ public class Node {
 			System.out.println(this.name);
 			if(this instanceof Player){
 				Player player = (Player) this;
-				System.out.println(player.character.costume);
+				System.out.println("> "+player.character.costume);
 			}
 			System.out.println(this.getState());
 			System.out.println();
@@ -108,7 +108,7 @@ public class Node {
 			System.err.println(this.name);
 			if(this instanceof Player){
 				Player player = (Player) this;
-				System.err.println(player.character.costume);
+				System.err.println("> "+player.character.costume);
 			}
 			System.err.println(this.getState());
 			System.err.println();
