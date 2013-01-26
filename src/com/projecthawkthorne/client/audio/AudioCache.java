@@ -31,4 +31,22 @@ public class AudioCache {
 		}
 		s.loop(0.15f);
 	}
+	
+	/**
+	 * removes music from the cache
+	 * @param soundFile
+	 * @return true if the soundFile was previously cached
+	 */
+	public static boolean removeMusic(String soundFile) {
+		Sound s;
+		if(musicCache.containsKey(soundFile)){
+			s = musicCache.remove(soundFile);
+			s.dispose();
+			return true;
+		}else{
+			//sound not found
+			return false;
+		}
+	}
+	
 }

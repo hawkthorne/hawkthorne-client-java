@@ -7,17 +7,13 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.GLU;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.projecthawkthorne.client.HawkthorneGame;
 import com.projecthawkthorne.client.display.Character;
@@ -37,8 +33,11 @@ public class Client {
 	//TODO: create overworld
 	private String level = HawkthorneGame.START_LEVEL;
 
-	//private byte[] receiveData = new byte[1024];
-	//private byte[] sendData = new byte[1024];
+	private byte[] receiveData;
+	private DatagramPacket receivePacket;
+	private byte[] sendData;
+	private DatagramPacket sendPacket;
+
 	private static final Client singleton= new Client();
 	private static final long MONITOR_THRESHOLD = 2000;
 	private static int serverPort;
@@ -52,12 +51,19 @@ public class Client {
 	private Client() {
 		try {
 			this.clientSocket = new DatagramSocket();
+			this.clientSocket.setSoTimeout(17);// ~1/60 seconds
+
 			Client.serverIp = InetAddress.getByName("localhost");
 			Client.serverPort = 12345;
 			this.entity = ("player"+Math.round(Math.random()*(99999)));
 			this.players = new HashMap<String,Player>();
 			//this.characters = new HashMap<String,Character>();
 			this.world = new HashMap<String,HashMap<String,Node>>();
+			receiveData = new byte[1024];
+			receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			sendData = new byte[1024];
+			sendPacket = new DatagramPacket(sendData, sendData.length, Client.serverIp, Client.serverPort);
+
 
 			initKeys();
 
@@ -110,12 +116,9 @@ public class Client {
 	 */
 	public DatagramPacket receive() {
 		try{
-			byte[] receiveData = new byte[1024];
-			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-			clientSocket.setSoTimeout(17);// ~1/60 seconds
+			clearPacket(receivePacket);
 			clientSocket.receive(receivePacket);
-			String modifiedSentence = new String(receivePacket.getData());
-			System.out.println("FROM SERVER: '" + modifiedSentence.trim()+"'");
+			//System.out.println("FROM SERVER: '" + modifiedSentence.trim()+"'");
 			//clientSocket.close();
 
 			return receivePacket;
@@ -123,6 +126,14 @@ public class Client {
 			return null;
 		}catch(Exception e){
 			return null;
+		}
+	}
+
+	private void clearPacket(DatagramPacket receivePacket2) {
+		// TODO Auto-generated method stub
+		byte[] data = receivePacket.getData();
+		for(int i=0;i<data.length;i++){
+			data[i] = '\0';
 		}
 	}
 
@@ -135,11 +146,11 @@ public class Client {
 	 */
 	public boolean send(String message){
 		try{
-			byte[] sendData = new byte[1024];
 			sendData = message.getBytes();
-			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, Client.serverIp, Client.serverPort);
+			sendPacket.setData(sendData);
+			//= new DatagramPacket(sendData, sendData.length, Client.serverIp, Client.serverPort);
 			clientSocket.send(sendPacket);
-			System.out.println("TO SERVER: '" + message+"'");
+			//System.out.println("TO SERVER: '" + message+"'");
 			//clientSocket.close();
 			return true;
 		}catch(Exception e){
@@ -165,26 +176,24 @@ public class Client {
 		Iterator<Node> nit = this.world.get(this.level).values().iterator();
 
 		long curTime = System.currentTimeMillis();
-		try{
 			while(nit.hasNext()){
 				Node n = nit.next();
-				if(n.isMonitoring() && (n.getLastUpdate()-curTime)>MONITOR_THRESHOLD){
-					this.world.get(this.level).remove(n.id);
-				}else if(n.getState().equals("dying") || n.getState().equals("dead")){
-					this.world.get(this.level).remove(n.id);
-				}else{
+//				if(n.isMonitoring() && (n.getLastUpdate()-curTime)>MONITOR_THRESHOLD){
+//					this.world.get(this.level).remove(n.id);
+//				}else if(n.getState().equals("dying") || n.getState().equals("dead")){
+//					this.world.get(this.level).remove(n.id);
+//				}else{
 					n.draw(batch);
-				}
+//				}
 			}
-		}catch(ConcurrentModificationException e){
-		}
+		
 
 		Iterator<Player> pit = this.players.values().iterator();
 		while(pit.hasNext()){
 			Player p = pit.next();
 			if(p==null){System.err.println("player is null");}
 			else if(p.levelName==null){System.err.println("player's level is null");}
-			if(p.levelName.equals(this.level)){
+			if(this.level.equals(p.levelName)){
 				p.draw(batch);
 			}
 		}

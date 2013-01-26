@@ -1,11 +1,9 @@
 package com.projecthawkthorne.client;
 
 import java.net.DatagramPacket;
-import java.util.HashMap;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,9 +15,6 @@ import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledLoader;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.tests.utils.OrthoCamController;
-import com.badlogic.gdx.tiledmappacker.TiledMapPacker;
-import com.badlogic.gdx.tiledmappacker.TiledMapPacker.TiledMapPackerSettings;
 import com.projecthawkthorne.client.audio.AudioCache;
 import com.projecthawkthorne.client.display.Assets;
 import com.projecthawkthorne.client.display.Node;
@@ -28,7 +23,7 @@ import com.projecthawkthorne.socket.Client;
 
 
 public class HawkthorneGame extends Game {
-	public static final String START_LEVEL = "forest-2";
+	public static final String START_LEVEL = "town";
 	Client client = Client.getSingleton();
 	private BitmapFont font;
 	private SpriteBatch spriteBatch;
@@ -37,7 +32,6 @@ public class HawkthorneGame extends Game {
 	private TileMapRenderer tileMapRenderer;
 	private OrthographicCamera cam;
 	private OrthographicCamera mapCam;
-	//private OrthoCamController camController;
 	private Vector2 maxCamPosition = new Vector2();
 
 	@Override
@@ -148,10 +142,6 @@ public class HawkthorneGame extends Game {
 		tileMapRenderer.render(mapCam);
 		//tileMapRenderer.render();
 		//long tenSeconds = 10000;
-		if(System.currentTimeMillis()%10000==0){
-			int foo = 47;
-			//cam.y = foo;
-		}
 		//camController.keyDown(Keys.RIGHT);
 		client.update();
 		

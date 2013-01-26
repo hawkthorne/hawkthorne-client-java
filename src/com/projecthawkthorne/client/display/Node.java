@@ -4,11 +4,8 @@
  */
 package com.projecthawkthorne.client.display;
 
-import java.io.File;
 import java.util.HashMap;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -86,22 +83,22 @@ public class Node {
 			long thenTime = this.getCreationTime();
 			float stateTime = Node.convertToSeconds(nowTime-thenTime);
 			TextureRegion tr = anim.getKeyFrame(stateTime);
-			System.out.println("===="+stateTime);
+			//System.out.println("===="+stateTime);
 			if(this.direction==Direction.LEFT){
 				batch.draw(tr, this.x, this.y+tr.getRegionHeight(), tr.getRegionWidth(),-tr.getRegionHeight());
 			}else{
 				batch.draw(tr, this.x+tr.getRegionWidth(), this.y+tr.getRegionHeight(), -tr.getRegionWidth(), -tr.getRegionHeight());
 			}
 			
-			System.out.println(this.id);
-			System.out.println(this.type);
-			System.out.println(this.name);
-			if(this instanceof Player){
-				Player player = (Player) this;
-				System.out.println("> "+player.character.costume);
-			}
-			System.out.println(this.getState());
-			System.out.println();
+//			System.out.println(this.id);
+//			System.out.println(this.type);
+//			System.out.println(this.name);
+//			if(this instanceof Player){
+//				Player player = (Player) this;
+//				System.out.println("> "+player.character.costume);
+//			}
+//			System.out.println(this.getState());
+//			System.out.println();
 		}catch(NullPointerException e){
 			System.err.println(this.id);
 			System.err.println(this.type);
@@ -114,14 +111,14 @@ public class Node {
 			System.err.println();
 		}
 		//TODO:instantiate the font once
-		BitmapFont font = new BitmapFont(true);
+//		BitmapFont font = new BitmapFont(true);
 
 		//write object details for debugging
-		String tmp = this.getClass().getSimpleName() + "\n"
-				+ this.id + "\n"
-				+ this.name + "\n"
-				+ this.type;
-		font.drawMultiLine(batch, tmp, this.x, this.y+30);
+//		String tmp = this.getClass().getSimpleName() + "\n"
+//				+ this.id + "\n"
+//				+ this.name + "\n"
+//				+ this.type;
+//		font.drawMultiLine(batch, tmp, this.x, this.y+30);
 	}
 
 	private static float convertToSeconds(long ms) {

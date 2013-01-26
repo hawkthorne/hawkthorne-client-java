@@ -17,14 +17,12 @@
 package com.projecthawkthorne.client.display;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -95,12 +93,12 @@ public class Assets {
 		// 2) add animation states to it
 		// 3) add the map to the enemy mapp
 		acorn = new HashMap<String,Animation>();
-		acorn.put("default", new Animation(0.2f, Animation.LOOP,
+		acorn.put("default", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.LOOP,
 				new TextureRegion(enemyTexture, 40, 0, 20, 20),
 				new TextureRegion(enemyTexture, 60, 0, 20, 20),
 				new TextureRegion(enemyTexture, 80, 0, 20, 20)
 		));
-		acorn.put("attack", new Animation(0.2f, Animation.LOOP,
+		acorn.put("attack", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.LOOP,
 				new TextureRegion(enemyTexture, 140, 0, 20, 20),
 				new TextureRegion(enemyTexture, 160, 0, 20, 20), 
 				new TextureRegion(enemyTexture, 180, 0, 20, 20)
@@ -108,15 +106,15 @@ public class Assets {
 		enemy.put("acorn",acorn);
 
 		hippy = new HashMap<String,Animation>();
-		hippy.put("default", new Animation(0.2f, Animation.LOOP,
+		hippy.put("default", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.LOOP,
 				new TextureRegion(enemyTexture, 94, 118, 47, 47),
 				new TextureRegion(enemyTexture, 141, 118, 47, 47)
 		));
-		hippy.put("attack", new Animation(0.2f, Animation.LOOP,
+		hippy.put("attack", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.LOOP,
 				new TextureRegion(enemyTexture, 0, 118, 47, 47),
 				new TextureRegion(enemyTexture, 47, 118, 47, 47)
 		));
-		hippy.put("dying", new Animation(0.2f, Animation.NORMAL,
+		hippy.put("dying", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.NORMAL,
 				new TextureRegion(enemyTexture, 192, 118, 47, 47)
 		));
 		enemy.put("hippy",hippy);
@@ -128,17 +126,17 @@ public class Assets {
 
 
 		leaf = new HashMap<String,Animation>();
-		leaf.put("default", new Animation(0.2f, Animation.NORMAL,
+		leaf.put("default", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.NORMAL,
 				new TextureRegion(materialTexture, 0, 0, 24, 24)
 		));
 		material.put("leaf", leaf);
 		rock = new HashMap<String,Animation>();
-		rock.put("default", new Animation(0.2f, Animation.NORMAL,
+		rock.put("default", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.NORMAL,
 				new TextureRegion(materialTexture, 24, 0, 24, 24)
 		));
 		material.put("rock", rock);
 		stick = new HashMap<String,Animation>();
-		stick.put("default", new Animation(0.2f, Animation.NORMAL,
+		stick.put("default", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.NORMAL,
 				new TextureRegion(materialTexture, 48, 0, 24, 24)
 		));
 		material.put("stick", stick);
@@ -156,15 +154,15 @@ public class Assets {
 		characters = new HashMap<String,Map<String,Map<String,Animation>>>();
 		abed = new HashMap<String,Map<String,Animation>>();
 		base = new HashMap<String,Animation>();
-		base.put("idle", new Animation(0.2f, Animation.NORMAL,
+		base.put("idle", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.NORMAL,
 				new TextureRegion(abedBaseTexture, 0, 0, 48, 48)
 		));
-		base.put("walk", new Animation(0.2f, Animation.LOOP,
+		base.put("walk", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.LOOP,
 				new TextureRegion(abedBaseTexture, 48, 0, 48, 48),
 				new TextureRegion(abedBaseTexture, 96, 0, 48, 48),
 				new TextureRegion(abedBaseTexture, 144, 0, 48, 48)
 		));
-		base.put("jump", new Animation(0.2f, Animation.NORMAL,
+		base.put("jump", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.NORMAL,
 				new TextureRegion(abedBaseTexture, 288, 0, 48, 48)
 		));
 		abed.put("base",base);
