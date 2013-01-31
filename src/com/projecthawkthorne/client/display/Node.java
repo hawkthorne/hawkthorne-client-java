@@ -6,9 +6,9 @@ package com.projecthawkthorne.client.display;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.projecthawkthorne.client.Direction;
@@ -24,8 +24,8 @@ public class Node {
 	public static final String IMAGES_FOLDER = "data/images/";
 	public static final String MAPS_FOLDER = "data/maps/";
 	public static final String MAPS_OUTPUT_FOLDER = "data/packs/";
-	public float x;
-	public float y;
+	private float x;
+	private float y;
 	public float width;
 	public float height;
 	protected String state = "default";
@@ -47,14 +47,8 @@ public class Node {
 	protected int srcHeight = 10;
 	public String id;
 	protected Direction direction;
-	//TODO:remove static modifier.
-	//for some reason it's needed right now
-	//to progress animation. go figure
-	private static final long creationTime = System.currentTimeMillis();
+	private final long creationTime = System.currentTimeMillis();
 	private long lastUpdate = System.currentTimeMillis();
-	//TODO:implement a situation without constant monitoring
-	private boolean monitor = true;	
-	
 
 	/**
 	 * @param type
@@ -65,7 +59,10 @@ public class Node {
 		this.type = type;
 	}
 
-
+	/**
+	 * draws the node if the type,name, and state are available
+	 * @param batch
+	 */
 	public void draw(SpriteBatch batch) {
 		Animation anim;
 		try{
@@ -83,22 +80,16 @@ public class Node {
 			long thenTime = this.getCreationTime();
 			float stateTime = Node.convertToSeconds(nowTime-thenTime);
 			TextureRegion tr = anim.getKeyFrame(stateTime);
-			//System.out.println("===="+stateTime);
+
 			if(this.direction==Direction.LEFT){
 				batch.draw(tr, this.x, this.y+tr.getRegionHeight(), tr.getRegionWidth(),-tr.getRegionHeight());
 			}else{
-				batch.draw(tr, this.x+tr.getRegionWidth(), this.y+tr.getRegionHeight(), -tr.getRegionWidth(), -tr.getRegionHeight());
+				batch.draw(tr, this.x+tr.getRegionWidth(), this.getY()+tr.getRegionHeight(), -tr.getRegionWidth(), -tr.getRegionHeight());
 			}
-			
-//			System.out.println(this.id);
-//			System.out.println(this.type);
-//			System.out.println(this.name);
-//			if(this instanceof Player){
-//				Player player = (Player) this;
-//				System.out.println("> "+player.character.costume);
-//			}
-//			System.out.println(this.getState());
-//			System.out.println();
+			if(this instanceof Player){
+				Player player = (Player) this;
+				batch.draw(player.getIndicator(), x+player.width/2-player.getIndicator().getWidth()/2,this.y-10);
+			}
 		}catch(NullPointerException e){
 			System.err.println(this.id);
 			System.err.println(this.type);
@@ -195,8 +186,8 @@ public class Node {
 		}
 
 		n.levelName = levelName;
-		n.x = x;
-		n.y = y;
+		n.setX(x);
+		n.setY(y);
 		n.state = state;
 		n.direction = direction;
 		n.position = position;
@@ -214,12 +205,27 @@ public class Node {
 		return this.lastUpdate;
 	}
 
-	public boolean isMonitoring(){
-		return monitor;
+	public String getState() {
+		return state;
 	}
 
 
-	public String getState() {
-		return state;
+	public float getX() {
+		return x;
+	}
+
+
+	public void setX(float x) {
+		this.x = x;
+	}
+
+
+	public float getY() {
+		return y;
+	}
+
+
+	public void setY(float y) {
+		this.y = y;
 	}
 }

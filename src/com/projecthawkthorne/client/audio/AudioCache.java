@@ -23,6 +23,14 @@ public class AudioCache {
 
 	public static void playMusic(String soundFile) {
 		Sound s;
+		if(soundFile==null){
+			soundFile = "level";
+			System.err.println("soundtrack was null");
+		}else if(soundFile.equals("null")){
+			soundFile = "level";
+			System.err.println("soundtrack was 'null'");
+		}
+		
 		if(musicCache.containsKey(soundFile)){
 			s = musicCache.get(soundFile);
 		}else{

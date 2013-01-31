@@ -2,16 +2,21 @@ package com.projecthawkthorne.client.display;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.projecthawkthorne.client.Direction;
 
 
 public class Player extends Node{
 	Character character;
 	protected String type = "player";
+	private Texture indicator = null;
 	//TODO: change constructor to take a name and a costume
 	public Player(String type, String name) {
 		super("player", name);
 		character = new Character(name,"base");
+		width = 48;
+		height = 48;
 	}
 	public static Player unpack(HashMap<String,Player> players, String params){
 		// TODO remove player/node unpack redundancy
@@ -71,8 +76,8 @@ public class Player extends Node{
 		}
 
 		p.levelName = levelName;
-		p.x = x;
-		p.y = y;
+		p.setX(x);
+		p.setY(y);
 		p.state = state;
 		p.direction = direction;
 		p.position = position;
@@ -83,5 +88,10 @@ public class Player extends Node{
 		p.character.name = name;
 		
 		return p;
+	}
+	public Texture getIndicator() {
+		if(indicator==null)
+			indicator = new Texture(Gdx.files.internal(IMAGES_FOLDER + "indicator.png"));
+		return indicator;
 	}
 }

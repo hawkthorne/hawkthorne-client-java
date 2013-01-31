@@ -1,5 +1,8 @@
 package com.projecthawkthorne.socket;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -7,6 +10,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -39,9 +45,9 @@ public class Client {
 	private DatagramPacket sendPacket;
 
 	private static final Client singleton= new Client();
-	private static final long MONITOR_THRESHOLD = 2000;
 	private static int serverPort;
 	private static Character clientCharacter;
+	private static BufferedWriter logFile;
 
 	public HashMap<Integer,Boolean> keyDown = new HashMap<Integer,Boolean>();
 	/**
@@ -63,6 +69,21 @@ public class Client {
 			receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			sendData = new byte[1024];
 			sendPacket = new DatagramPacket(sendData, sendData.length, Client.serverIp, Client.serverPort);
+
+			DateFormat df = new SimpleDateFormat("yyyy_MM_dd");
+			String prefix = "client"+df.format(new Date());
+			String suffix = ".log";
+			File f = new File(prefix+suffix);
+			int i = 1;
+			while(f.exists()){
+				f = new File(prefix+"_"+i+suffix);
+				i++;
+			}
+			try {
+				logFile = new BufferedWriter(new FileWriter(f));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 
 			initKeys();
@@ -104,7 +125,7 @@ public class Client {
 
 	/**
 	 * returns one identical server every time
-	 * @return 
+	 * @return the client
 	 */
 	public static Client getSingleton(){
 		return singleton;
@@ -118,7 +139,9 @@ public class Client {
 		try{
 			clearPacket(receivePacket);
 			clientSocket.receive(receivePacket);
-			//System.out.println("FROM SERVER: '" + modifiedSentence.trim()+"'");
+			logFile.write("FROM SERVER: '" + receivePacket.getData()+"'\n");
+			logFile.write("       time: '" + System.currentTimeMillis()+"'\n");
+			logFile.flush();
 			//clientSocket.close();
 
 			return receivePacket;
@@ -150,7 +173,9 @@ public class Client {
 			sendPacket.setData(sendData);
 			//= new DatagramPacket(sendData, sendData.length, Client.serverIp, Client.serverPort);
 			clientSocket.send(sendPacket);
-			//System.out.println("TO SERVER: '" + message+"'");
+			logFile.write("TO SERVER: '" + message+"'\n");
+			logFile.write("     time: '" + System.currentTimeMillis()+"'\n");
+			logFile.flush();
 			//clientSocket.close();
 			return true;
 		}catch(Exception e){
@@ -175,18 +200,11 @@ public class Client {
 		}
 		Iterator<Node> nit = this.world.get(this.level).values().iterator();
 
-		long curTime = System.currentTimeMillis();
-			while(nit.hasNext()){
-				Node n = nit.next();
-//				if(n.isMonitoring() && (n.getLastUpdate()-curTime)>MONITOR_THRESHOLD){
-//					this.world.get(this.level).remove(n.id);
-//				}else if(n.getState().equals("dying") || n.getState().equals("dead")){
-//					this.world.get(this.level).remove(n.id);
-//				}else{
-					n.draw(batch);
-//				}
-			}
-		
+		while(nit.hasNext()){
+			Node n = nit.next();
+			n.draw(batch);
+		}
+
 
 		Iterator<Player> pit = this.players.values().iterator();
 		while(pit.hasNext()){

@@ -165,6 +165,9 @@ public class Assets {
 		base.put("jump", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.NORMAL,
 				new TextureRegion(abedBaseTexture, 288, 0, 48, 48)
 		));
+		base.put("crouch", new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.NORMAL,
+				new TextureRegion(abedBaseTexture, 8*48, 2*48, 48, 48)
+		));
 		abed.put("base",base);
 		characters.put("abed",abed);
     }

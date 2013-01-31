@@ -96,6 +96,7 @@ public class HawkthorneGame extends Game {
 		mapCam.position.set(tileMapRenderer.getMapWidthUnits() / 2, tileMapRenderer.getMapHeightUnits() / 2, 0);
 		cam.zoom = 0.5f;
 		mapCam.zoom = 0.5f;
+
 		//camController = new OrthoCamController(cam);
 		//Gdx.input.setInputProcessor(camController);
 
@@ -123,14 +124,23 @@ public class HawkthorneGame extends Game {
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 		try{
 			Player player = this.client.players.get(this.client.getEntity());
-			camX = player.x;
-			int mapHeight = tileMapRenderer.getMapHeightUnits() / 2;
-			camY = mapHeight;
+			camX = player.getX();
+		    int mapHeight = tileMapRenderer.getMapHeightUnits() / 2;
+			//camY = mapHeight;
+			int offset;
+			try{
+				offset = Integer.parseInt(map.properties.get("offset"));
+			}catch(Exception e){
+				offset = 0;
+			}
+			float y = player.getY();
+			//TODO: implement panning
+			int pan = 0;
+			camY = mapHeight;//limit( limit(y, 0, offset) + pan, 0, offset );
 		}catch(Exception e){
 			camX = 0;
 			camY = 0;
 		}
-		
 		camX = bound(camX,cam.zoom*cam.viewportWidth/2,map.width*24-cam.zoom*cam.viewportWidth/2);
 		//cam.position.set(tileMapRenderer.getMapWidthUnits() / 2, tileMapRenderer.getMapHeightUnits() / 2, 0);
 		cam.position.set(camX, camY, 0);
@@ -138,8 +148,8 @@ public class HawkthorneGame extends Game {
 		cam.update(true);
 		mapCam.update(true);
 		
-
 		tileMapRenderer.render(mapCam);
+
 		//tileMapRenderer.render();
 		//long tenSeconds = 10000;
 		//camController.keyDown(Keys.RIGHT);
@@ -159,6 +169,23 @@ public class HawkthorneGame extends Game {
 		client.draw(spriteBatch);
 		spriteBatch.end();
 		//Gdx.gl.glEnable(GL10.GL_CULL_FACE);
+	}
+	
+	/**
+	 * bounds x between bound1 and bound2
+	 * @param x
+	 * @param bound1
+	 * @param bound2
+	 * @return
+	 */
+	private float limit(float x, float bound1, float bound2){
+		if(x<bound1 && x<bound2){
+			return Math.min(bound1, bound2);
+		}else if(x>bound1 && x>bound2){
+			return Math.max(bound1, bound2);
+		}else{
+			return x;
+		}
 	}
 
 	private float bound(float camX, float f, float g) {
