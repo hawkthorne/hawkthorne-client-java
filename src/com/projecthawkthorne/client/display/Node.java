@@ -86,10 +86,6 @@ public class Node {
 			}else{
 				batch.draw(tr, this.x+tr.getRegionWidth(), this.getY()+tr.getRegionHeight(), -tr.getRegionWidth(), -tr.getRegionHeight());
 			}
-			if(this instanceof Player){
-				Player player = (Player) this;
-				batch.draw(player.getIndicator(), x+player.width/2-player.getIndicator().getWidth()/2,this.y-10);
-			}
 		}catch(NullPointerException e){
 			System.err.println(this.id);
 			System.err.println(this.type);
@@ -100,6 +96,10 @@ public class Node {
 			}
 			System.err.println(this.getState());
 			System.err.println();
+		}
+		if(this instanceof Player){
+			Player player = (Player) this;
+			batch.draw(player.getIndicator(), x+player.width/2-player.getIndicator().getWidth()/2,this.y-10);
 		}
 		//TODO:instantiate the font once
 //		BitmapFont font = new BitmapFont(true);

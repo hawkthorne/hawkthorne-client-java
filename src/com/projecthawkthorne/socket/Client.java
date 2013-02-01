@@ -100,8 +100,6 @@ public class Client {
 			//YIKES... which do i want
 			message = this.getEntity()+" enter "+level;
 			this.send(message);
-			message = this.getEntity()+" enterLevel "+level;
-			this.send(message);
 			message = this.getEntity()+" update "+level;
 			this.send(message);
 
