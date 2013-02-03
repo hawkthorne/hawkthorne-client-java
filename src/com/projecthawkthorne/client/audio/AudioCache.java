@@ -1,6 +1,7 @@
 package com.projecthawkthorne.client.audio;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -21,14 +22,24 @@ public class AudioCache {
 		s.play(0.3f);
 	}
 
-	public static void playMusic(String soundFile) {
+	public static void playMusic(Object object) {
+		assert(object instanceof String);
+		String soundFile = (String) object;
+		//stop old music
+		Iterator<Sound> it = musicCache.values().iterator();
+		while(it.hasNext()){
+			Sound s = it.next();
+			s.stop();
+			s.dispose();
+		}
+		
 		Sound s;
 		if(soundFile==null){
 			soundFile = "level";
-			System.err.println("soundtrack was null");
+			System.err.println("soundtrack was null: using default level soundtrack");
 		}else if(soundFile.equals("null")){
 			soundFile = "level";
-			System.err.println("soundtrack was 'null'");
+			System.err.println("soundtrack was 'null': using default level soundtrack");
 		}
 		
 		if(musicCache.containsKey(soundFile)){
