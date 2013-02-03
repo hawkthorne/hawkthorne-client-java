@@ -141,6 +141,8 @@ public class Node {
 		int position = 1;
 		String name = null;
 		String type = null;
+		float width;
+		float height;
 
 		String[] nodeArgs = params.split("["+NULL+"]");
 		for(int i=0; i<nodeArgs.length;i++){
@@ -170,6 +172,12 @@ public class Node {
 				name = argValue;
 			}else if(argName.equals("type")){
 				type = argValue;
+			}else if(argName.equals("width")){
+				width = Float.parseFloat(argValue);
+				//System.err.println("width is currently unused");
+			}else if(argName.equals("height")){
+				height = Float.parseFloat(argValue);
+				//System.err.println("width is currently unused");
 			}else{
 				throw new UnsupportedOperationException("argName=="+argName+", argValue=="+argValue);
 			}

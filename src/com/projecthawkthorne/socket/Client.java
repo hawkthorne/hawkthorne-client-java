@@ -137,7 +137,9 @@ public class Client {
 		try{
 			clearPacket(receivePacket);
 			clientSocket.receive(receivePacket);
-			logFile.write("FROM SERVER: '" + receivePacket.getData()+"'\n");
+			logFile.write("FROM SERVER: '" + new String(receivePacket.getData()).trim()+"'\n");
+			logFile.write("    address: '" + receivePacket.getAddress()+"'\n");
+			logFile.write("       port: '" + receivePacket.getPort()+"'\n");
 			logFile.write("       time: '" + System.currentTimeMillis()+"'\n");
 			logFile.flush();
 			//clientSocket.close();
@@ -194,7 +196,8 @@ public class Client {
 			throw new NullPointerException("level can't be null");
 		}
 		if(this.world.get(this.level)==null){
-			throw new NullPointerException("world has no level by the name: "+this.level);
+			System.err.println("world has no level by the name: "+this.level+"... initializing");
+			this.world.put(this.level, new HashMap<String,Node>());
 		}
 		Iterator<Node> nit = this.world.get(this.level).values().iterator();
 
