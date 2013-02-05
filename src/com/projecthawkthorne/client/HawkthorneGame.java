@@ -81,9 +81,7 @@ public class HawkthorneGame extends Game {
 		try{
 			Player player = this.client.players.get(this.client.getEntity());
 			camX = player.getX()+player.width/2;
-		    //camY = mapHeight;
-			float y = player.getY();
-			//TODO: implement panning
+		    //TODO: implement panning
 			int pan = 0;
 			camY = player.getY();//limit( limit(y, 0, offset) + pan, 0, offset );
 		}catch(Exception e){
@@ -201,7 +199,7 @@ public class HawkthorneGame extends Game {
 		assetManager.finishLoading();
 		map = assetManager.get(mapFileName);
 		endTime = System.currentTimeMillis();
-		System.out.println("Loaded map in " + (endTime - startTime) + "ms");
+		System.out.println("Loaded map "+mapFileName+" in " + (endTime - startTime) + "ms");
 
 		AudioCache.playMusic(map.getProperties().get("soundtrack"));
 
