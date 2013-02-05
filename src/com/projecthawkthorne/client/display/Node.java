@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.projecthawkthorne.client.Direction;
+import com.projecthawkthorne.client.HawkthorneGame;
 
 /**
  *
@@ -29,7 +30,7 @@ public class Node {
 	public float width;
 	public float height;
 	protected String state = "default";
-	protected String type;
+	private String type;
 	protected String name;
 	//!!!!!Warning if you change level from type Level to type String
 	// this will be structurally different from the back end Node
@@ -56,7 +57,7 @@ public class Node {
 	 */
 	public Node(String type, String name) {	
 		this.name = name;
-		this.type = type;
+		this.setType(type);
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class Node {
 						get(player.character.costume).
 						get(player.getState());
 			}else{
-				anim = Assets.nodes.get(this.type).
+				anim = Assets.nodes.get(this.getType()).
 						get(this.name).
 						get(this.getState());
 			}
@@ -87,15 +88,29 @@ public class Node {
 				batch.draw(tr, this.x+tr.getRegionWidth(), this.getY()+tr.getRegionHeight(), -tr.getRegionWidth(), -tr.getRegionHeight());
 			}
 		}catch(NullPointerException e){
-			System.err.println(this.id);
-			System.err.println(this.type);
-			System.err.println(this.name);
-			if(this instanceof Player){
-				Player player = (Player) this;
-				System.err.println("> "+player.character.costume);
+			if(HawkthorneGame.DEBUG){
+				System.err.println(this.id);
+				System.err.println(this.getType());
+				System.err.println(this.name);
+				if(this instanceof Player){
+					Player player = (Player) this;
+					System.err.println("> "+player.character.costume);
+				}
+				System.err.println(this.getState());
+				System.err.println();
+
+				TextureRegion defaultTexture = Assets.standard.get("node").getKeyFrame(0);
+				int height = Math.round(this.height);
+				height = height > 0 ? height : defaultTexture.getRegionHeight();
+				int width = Math.round(this.width);
+				width = width > 0 ? width : defaultTexture.getRegionWidth();
+
+				if(this.direction==Direction.LEFT){
+					batch.draw(defaultTexture , this.x, this.y+height, width,-height);
+				}else{
+					batch.draw(defaultTexture, this.x+width, this.y+height, -width, -height);
+				}
 			}
-			System.err.println(this.getState());
-			System.err.println();
 		}
 		if(this instanceof Player){
 			Player player = (Player) this;
@@ -141,8 +156,10 @@ public class Node {
 		int position = 1;
 		String name = null;
 		String type = null;
-		float width;
-		float height;
+		float width = 0;
+		float height = 0;
+		String spritePath;
+		String sheetPath;
 
 		String[] nodeArgs = params.split("["+NULL+"]");
 		for(int i=0; i<nodeArgs.length;i++){
@@ -165,7 +182,15 @@ public class Node {
 			}else if(argName.equals("state")){
 				state = argValue;
 			}else if(argName.equals("direction")){
-				direction = Direction.valueOf(argValue.toUpperCase());
+				try{
+					direction = Direction.valueOf(argValue.toUpperCase());
+				}catch(Exception e){
+					System.out.println(type);
+					System.out.println(name);
+					System.out.println(state);
+					System.out.println(argValue);
+					e.printStackTrace();
+				}
 			}else if(argName.equals("position")){
 				position = Integer.parseInt(argValue);
 			}else if(argName.equals("name")){
@@ -174,10 +199,12 @@ public class Node {
 				type = argValue;
 			}else if(argName.equals("width")){
 				width = Float.parseFloat(argValue);
-				//System.err.println("width is currently unused");
 			}else if(argName.equals("height")){
 				height = Float.parseFloat(argValue);
-				//System.err.println("width is currently unused");
+			}else if(argName.equals("spritePath")){
+				spritePath = argValue;
+			}else if(argName.equals("sheetPath")){
+				sheetPath = argValue;
 			}else{
 				throw new UnsupportedOperationException("argName=="+argName+", argValue=="+argValue);
 			}
@@ -200,7 +227,9 @@ public class Node {
 		n.direction = direction;
 		n.position = position;
 		n.name = name;
-		n.type = type;
+		n.setType(type);
+		n.width = width;
+		n.height = height;
 		n.resetUpdateTime();
 		return n;
 	}
@@ -235,5 +264,13 @@ public class Node {
 
 	public void setY(float y) {
 		this.y = y;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

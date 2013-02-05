@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -115,9 +117,10 @@ public class Client {
 		keyDown.put(Keys.RIGHT, false);
 		keyDown.put(Keys.UP, false);
 		keyDown.put(Keys.DOWN, false);
-		keyDown.put(Keys.SPACE, false);
-		keyDown.put(Keys.SHIFT_LEFT, false);
+		keyDown.put(Keys.D, false);
 		keyDown.put(Keys.ESCAPE, false);
+		keyDown.put(Keys.X, false);
+		keyDown.put(Keys.C, false);
 		keyDown.put(Keys.V, false);
 	}
 
@@ -201,9 +204,17 @@ public class Client {
 		}
 		Iterator<Node> nit = this.world.get(this.level).values().iterator();
 
+		long curTime = System.currentTimeMillis();
+		List<Node> liquids = new LinkedList<Node>();
 		while(nit.hasNext()){
 			Node n = nit.next();
-			n.draw(batch);
+			if(n.getType().equals("liquid")){
+				liquids.add(n);
+			}else if(curTime - n.getLastUpdate() < 1000){
+				n.draw(batch);
+			}else{
+				//TODO: find a threadsafe removal strategy
+			}
 		}
 
 
@@ -215,6 +226,9 @@ public class Client {
 			if(this.level.equals(p.levelName)){
 				p.draw(batch);
 			}
+		}
+		for(int i=0;i<liquids.size();i++){
+			liquids.get(i).draw(batch);
 		}
 	}
 
@@ -276,23 +290,13 @@ public class Client {
 		}
 
 
-		if(keyDown.get(Keys.SPACE) && !Gdx.input.isKeyPressed(Keys.SPACE)){
-			keyDown.put(Keys.SPACE, false);
+		if(keyDown.get(Keys.X) && !Gdx.input.isKeyPressed(Keys.X)){
+			keyDown.put(Keys.X, false);
 			message = String.format("%s %s %s", this.entity, "keyreleased", "JUMP");
 			this.send(message);
-		}else if(!keyDown.get(Keys.SPACE) && Gdx.input.isKeyPressed(Keys.SPACE)){
-			keyDown.put(Keys.SPACE, true);
+		}else if(!keyDown.get(Keys.X) && Gdx.input.isKeyPressed(Keys.X)){
+			keyDown.put(Keys.X, true);
 			message = String.format("%s %s %s", this.entity, "keypressed", "JUMP");
-			this.send(message);
-		}
-
-		if(keyDown.get(Keys.SHIFT_LEFT) && !Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
-			keyDown.put(Keys.SHIFT_LEFT, false);
-			message = String.format("%s %s %s", this.entity, "keyreleased", "ACTION");
-			this.send(message);
-		}else if(!keyDown.get(Keys.SHIFT_LEFT) && Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
-			keyDown.put(Keys.SHIFT_LEFT, true);
-			message = String.format("%s %s %s", this.entity, "keypressed", "ACTION");
 			this.send(message);
 		}
 
@@ -306,22 +310,22 @@ public class Client {
 			this.send(message);
 		}
 
-		if(keyDown.get(Keys.V) && !Gdx.input.isKeyPressed(Keys.V)){
-			keyDown.put(Keys.V, false);
+		if(keyDown.get(Keys.D) && !Gdx.input.isKeyPressed(Keys.D)){
+			keyDown.put(Keys.D, false);
 			message = String.format("%s %s %s", this.entity, "keyreleased", "SELECT");
 			this.send(message);
-		}else if(!keyDown.get(Keys.V) && Gdx.input.isKeyPressed(Keys.V)){
-			keyDown.put(Keys.V, true);
+		}else if(!keyDown.get(Keys.D) && Gdx.input.isKeyPressed(Keys.D)){
+			keyDown.put(Keys.D, true);
 			message = String.format("%s %s %s", this.entity, "keypressed", "SELECT");
 			this.send(message);
 		}
 
-		if(keyDown.get(Keys.V) && !Gdx.input.isKeyPressed(Keys.V)){
-			keyDown.put(Keys.V, false);
+		if(keyDown.get(Keys.C) && !Gdx.input.isKeyPressed(Keys.C)){
+			keyDown.put(Keys.C, false);
 			message = String.format("%s %s %s", this.entity, "keyreleased", "ATTACK");
 			this.send(message);
-		}else if(!keyDown.get(Keys.V) && Gdx.input.isKeyPressed(Keys.V)){
-			keyDown.put(Keys.V, true);
+		}else if(!keyDown.get(Keys.C) && Gdx.input.isKeyPressed(Keys.C)){
+			keyDown.put(Keys.C, true);
 			message = String.format("%s %s %s", this.entity, "keypressed", "ATTACK");
 			this.send(message);
 		}

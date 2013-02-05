@@ -30,7 +30,6 @@ public class AudioCache {
 		while(it.hasNext()){
 			Sound s = it.next();
 			s.stop();
-			s.dispose();
 		}
 		
 		Sound s;

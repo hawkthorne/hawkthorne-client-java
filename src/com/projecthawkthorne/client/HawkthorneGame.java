@@ -1,10 +1,12 @@
 package com.projecthawkthorne.client;
 
+import java.io.PrintStream;
 import java.net.DatagramPacket;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
@@ -28,6 +30,7 @@ public class HawkthorneGame extends Game {
 	//i.e. tileset image width and height are powers of 2
 	// and uses CSV encoding
 	public static final String START_LEVEL = "town";
+	public static final boolean DEBUG = true;
 	Client client = Client.getSingleton();
 	private BitmapFont font;
 	private SpriteBatch spriteBatch;
@@ -93,10 +96,19 @@ public class HawkthorneGame extends Game {
 		int mapHeight = Math.round(tmtl.getHeight()*tmtl.getTileHeight());
 		int mapWidth = Math.round(tmtl.getWidth()*tmtl.getTileHeight());
 		camX = limit(camX,cam.zoom*cam.viewportWidth/2,mapWidth-cam.zoom*cam.viewportWidth/2);
-		if(camY == limit(camY,offset,offset+cam.viewportHeight)){
-			camY = 0;
+		if(camY>offset*cam.zoom*tmtl.getTileHeight()*2){
+			camY = offset*cam.zoom*tmtl.getTileHeight();
 		}else{
-			camY = camY - mapHeight/2;
+			camY = camY - mapHeight*cam.zoom;
+		}
+		if(Gdx.input.isKeyPressed(Keys.Q)){
+			System.out.println("camY      =="+camY);
+			System.out.println("player,y  =="+this.client.players.get(this.client.getEntity()).getY());
+			System.out.println("offset    =="+offset);
+			System.out.println("viewHeight=="+cam.viewportHeight);
+			System.out.println("mapHeight =="+mapHeight);
+			System.out.println("tileHeight=="+tmtl.getTileHeight());
+			System.out.println();
 		}
 		//cam.position.set(tileMapRenderer.getMapWidthUnits() / 2, tileMapRenderer.getMapHeightUnits() / 2, 0);
 		cam.position.set(camX, camY+mapHeight/2, 0);
@@ -183,6 +195,7 @@ public class HawkthorneGame extends Game {
 		startTime = System.currentTimeMillis();
 		String mapFileName = path + toLevel + ".tmx";
 		AssetManager assetManager = new AssetManager();
+		//TODO:bypass if it's not an ordinary level
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 		assetManager.load(mapFileName, TiledMap.class);
 		assetManager.finishLoading();
@@ -207,7 +220,7 @@ public class HawkthorneGame extends Game {
 		mapCam.zoom = 0.5f;
 
 		try{
-			offset = (Integer) map.getProperties().get("offset");
+			offset = Integer.parseInt((String) map.getProperties().get("offset"));
 		}catch(Exception e){
 			System.err.println("no offset found: using default '0'");
 			offset = 0;

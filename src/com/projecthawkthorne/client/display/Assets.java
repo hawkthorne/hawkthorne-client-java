@@ -27,38 +27,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
-	public static Texture background;
-	public static TextureRegion backgroundRegion;
-
-	public static Texture items;
-	public static TextureRegion mainMenu;
-	public static TextureRegion pauseMenu;
-	public static TextureRegion ready;
-	public static TextureRegion gameOver;
-	public static TextureRegion highScoresRegion;
-	public static TextureRegion logo;
-	public static TextureRegion soundOn;
-	public static TextureRegion soundOff;
-	public static TextureRegion arrow;
-	public static TextureRegion pause;
-	public static TextureRegion spring;
-	public static TextureRegion castle;
-	public static Animation coinAnim;
-	public static Animation bobJump;
-	public static Animation bobFall;
-	public static TextureRegion bobHit;
-	public static Animation squirrelFly;
-	public static TextureRegion platform;
-	public static Animation brakingPlatform;
-	public static BitmapFont font;
-
-	public static Music music;
-	public static Sound jumpSound;
-	public static Sound highJumpSound;
-	public static Sound hitSound;
-	public static Sound coinSound;
-	public static Sound clickSound;
-	
 	private static Texture enemyTexture;
 	//key is a state
 	private static Map<String, Animation> acorn;
@@ -75,12 +43,18 @@ public class Assets {
 	private static HashMap<String, Animation> leaf;
 	private static HashMap<String, Animation> rock;
 	private static HashMap<String, Animation> stick;
+	public static HashMap<String, Animation> standard;
+	private static Texture defaultTexture;
 
 	public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
 	}
 
 	public static void load () {
+		//
+		standard = new HashMap<String,Animation>();
+		defaultTexture = loadTexture("data/images/defaultTexture.png");
+		
 		//create blank nodes map
 		nodes = new HashMap<String, Map<String, Map<String,Animation>>>();
 		
@@ -170,6 +144,11 @@ public class Assets {
 		));
 		abed.put("base",base);
 		characters.put("abed",abed);
+		
+		
+		standard.put("node",new Animation(0.2f, com.badlogic.gdx.graphics.g2d.Animation.NORMAL,
+				new TextureRegion(defaultTexture, 288, 0, 48, 48)
+		));
     }
 	
 	public static void playSound (Sound sound) {
