@@ -29,7 +29,7 @@ public class HawkthorneGame extends Game {
 	//currently the town is the only file that conforms to new schema
 	//i.e. tileset image width and height are powers of 2
 	// and uses CSV encoding
-	public static final String START_LEVEL = "town";
+	public static final String START_LEVEL = "multiplayer";
 	public static final boolean DEBUG = true;
 	Client client = Client.getSingleton();
 	private BitmapFont font;
