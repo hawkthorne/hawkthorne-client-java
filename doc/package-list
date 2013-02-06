@@ -1,6 +1,4 @@
-com.projecthawkthorne.datastructures
-com.projecthawkthorne.gamestate
-com.projecthawkthorne.server
-com.projecthawkthorne.server.hardoncollider
-com.projecthawkthorne.server.nodes
+com.projecthawkthorne.client
+com.projecthawkthorne.client.audio
+com.projecthawkthorne.client.display
 com.projecthawkthorne.socket
