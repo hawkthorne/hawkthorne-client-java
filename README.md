@@ -1,7 +1,23 @@
 hawkthorne-client-java
 ======================
+# Setting up Your Environment
 
-Main page:
+
+1. Download the most recent version of [The Eclipse IDE for Java EE Developers](http://www.eclipse.org/downloads/)
+2. Navigate to http://code.google.com/p/libgdx/wiki/ProjectSetupNew to set up your environment
+3. Fork this repository by clicking the 'Fork' button on the top of this page
+4. Clone this repository by clicking the 'Clone ...' button on this page
+5. Open up Eclipse
+6. Go to File > New > Project 
+7. Select Java Project and click `Next`
+8. Unselect "Use default location" and browse to wherever you cloned this repository
+9. Click Finish
+10. In the menu bar go to Windows > Show View > Other > General > Project Explorer
+11. Right click the project and go to Properties
+12. In the Java Build Path Tab add gdx, gdx-audio, gdx-backends-lwjgl, and gdx-maps
+13. Select OK
+
+# Running the Client without Eclipse:
 
 [Multiplayer Hawkthorne](http://nimbusbp1729.github.com/hawkthorne-server-lua/)
 
