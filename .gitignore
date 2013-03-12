@@ -8,6 +8,7 @@
 *.so
 .\bin\*
 .\doc\*
+.classpath
 
 # Packages #
 ############

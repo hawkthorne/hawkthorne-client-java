@@ -1010,7 +1010,7 @@
   <object type="climbable" x="816" y="1344" width="24" height="192"/>
   <object type="climbable" x="96" y="1536" width="24" height="144"/>
   <object type="climbable" x="624" y="1680" width="24" height="168"/>
-  <object name="main" type="door" x="24" y="2232" width="48" height="72"/>
+  <object name="main" type="door" x="168" y="1872" width="48" height="72"/>
   <object type="enemy" x="96" y="432" width="24" height="24">
    <properties>
     <property name="enemytype" value="acorn"/>
@@ -1052,7 +1052,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="wall" width="46" height="100" visible="0" opacity="0.9">
+ <objectgroup name="wall" width="46" height="100" opacity="0.9">
   <object x="552" y="456" width="144" height="144"/>
   <object x="816" y="456" width="144" height="144"/>
   <object x="0" y="1080" width="264" height="96"/>
@@ -1073,7 +1073,7 @@
   <object x="840" y="2304" width="264" height="96"/>
   <object x="0" y="2304" width="264" height="96"/>
  </objectgroup>
- <objectgroup name="platform" width="46" height="100" visible="0">
+ <objectgroup name="platform" width="46" height="100">
   <object x="0" y="288" width="1104" height="24"/>
   <object x="480" y="600" width="72" height="24"/>
   <object x="72" y="552" width="336" height="24"/>
